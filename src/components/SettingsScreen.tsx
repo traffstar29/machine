@@ -8,10 +8,10 @@ export function SettingsScreen() {
   const goProcessing = useAppStore((s) => s.goProcessing);
 
   return (
-    <div className="animate-fade-in pb-28 pt-4">
-      <header className="mb-8 flex flex-col items-center text-center">
-        <img src={aviatorLogo.src} alt="Aviator logo" className="h-auto w-52" />
-        <h1 className="mt-5 bg-gradient-to-r from-red-300 via-white to-red-200 bg-clip-text text-3xl font-black tracking-tight text-transparent">
+    <div className="animate-fade-in pb-24 pt-3">
+      <header className="mb-6 flex flex-col items-center text-center">
+        <img src={aviatorLogo.src} alt="Aviator logo" className="h-auto w-40" />
+        <h1 className="mt-3 bg-gradient-to-r from-red-300 via-white to-red-200 bg-clip-text text-3xl font-black tracking-tight text-transparent">
           PROFIT MACHINE
         </h1>
         <p className="mt-1 text-xs uppercase tracking-[0.26em] text-red-200/70">
@@ -19,7 +19,7 @@ export function SettingsScreen() {
         </p>
       </header>
 
-      <div className="mx-auto flex max-w-lg flex-col gap-6">
+      <div className="mx-auto flex max-w-lg flex-col gap-4">
         <GlassCard className="p-5">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-red-200/70">
             How to use

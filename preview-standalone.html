@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Aviator AI Predictor - HTML Preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      body {
+        font-family: Inter, system-ui, sans-serif;
+        background: #140307;
+        background-image:
+          radial-gradient(ellipse 120% 80% at 50% -20%, rgba(220, 38, 38, 0.36), transparent 55%),
+          radial-gradient(ellipse 80% 50% at 100% 50%, rgba(244, 63, 94, 0.14), transparent 45%),
+          radial-gradient(ellipse 60% 40% at 0% 80%, rgba(185, 28, 28, 0.12), transparent 40%);
+        background-attachment: fixed;
+      }
+      .glass {
+        border: 1px solid rgba(252, 165, 165, 0.18);
+        background: rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(16px);
+      }
+    </style>
+  </head>
+  <body class="min-h-[100dvh] text-slate-100 antialiased">
+    <main class="mx-auto w-full max-w-lg px-4 pb-28 pt-4">
+      <section id="screen-menu" class="animate-[fade_250ms_ease-out]">
+        <header class="mb-6 text-center">
+          <img src="./aviator.png" alt="Aviator logo" class="mx-auto w-40" />
+          <h1 class="mt-3 bg-gradient-to-r from-red-300 via-white to-red-200 bg-clip-text text-3xl font-black text-transparent">
+            PROFIT MACHINE
+          </h1>
+          <p class="mt-1 text-xs uppercase tracking-[0.24em] text-red-200/70">Signal Assistant</p>
+        </header>
+
+        <div class="space-y-4">
+          <div class="glass rounded-2xl p-5">
+            <p class="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-red-200/70">How to use</p>
+            <ol class="space-y-2 text-sm leading-relaxed">
+              <li>1. The app predicts Aviator outcomes and shows where you should cash out.</li>
+              <li>2. The app shows up to what coefficient value you should exit the round.</li>
+              <li>3. The coefficient in the app and in the game may differ, but our signal shows an exit point designed to keep your session profitable.</li>
+              <li>4. Before main play, sync your account with a few minimum-bet rounds.</li>
+              <li>5. Synchronization improves signal precision. Then begin normal sessions.</li>
+            </ol>
+          </div>
+
+        </div>
+
+        <div class="fixed bottom-0 left-0 right-0 border-t border-white/10 bg-[#190308]/90 px-4 py-4 backdrop-blur-xl">
+          <div class="mx-auto w-full max-w-lg">
+            <button
+              id="btn-start"
+              class="w-full rounded-2xl bg-gradient-to-r from-red-700 via-red-600 to-rose-600 py-4 text-sm font-black uppercase tracking-[0.2em] text-white"
+            >
+              START
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-loading" hidden class="min-h-[70vh] flex-col items-center pt-8">
+        <header class="mb-10 text-center">
+          <img src="./aviator.png" alt="Aviator logo" class="mx-auto w-36" />
+          <h2 class="bg-gradient-to-r from-red-300 to-rose-200 bg-clip-text text-2xl font-black text-transparent">
+            PROFIT MACHINE
+          </h2>
+          <p class="mt-1 text-xs uppercase tracking-[0.28em] text-red-200/60">Signal loading</p>
+        </header>
+
+        <div class="flex flex-col items-center">
+          <div class="relative flex h-52 w-52 items-center justify-center rounded-full border-[12px] border-red-300/20">
+            <div id="load-pct" class="text-5xl font-black text-white">0%</div>
+          </div>
+          <p class="mt-6 text-xs font-bold uppercase tracking-[0.32em] text-red-300/90">Processing</p>
+        </div>
+
+        <div class="mt-8 w-full max-w-md text-center">
+          <p class="text-sm font-medium">Preparing Aviator prediction...</p>
+          <p id="sub-status" class="mt-2 min-h-[1.25rem] text-xs text-slate-400"></p>
+        </div>
+
+      </section>
+
+      <section id="screen-result" hidden class="pt-6">
+        <header class="mb-8 text-center">
+          <img src="./aviator.png" alt="Aviator logo" class="mx-auto w-36" />
+          <h2 class="bg-gradient-to-r from-red-300 to-rose-200 bg-clip-text text-2xl font-black text-transparent">PROFIT MACHINE</h2>
+          <p class="mt-1 text-xs uppercase tracking-[0.28em] text-red-200/60">Prediction ready</p>
+        </header>
+
+        <div class="mx-auto flex max-w-lg flex-col items-center gap-6">
+          <p class="text-center text-sm font-semibold uppercase tracking-[0.14em]">Signal</p>
+          <div class="rounded-3xl border border-red-400/40 bg-red-500/10 px-10 py-8 shadow-[0_0_35px_rgba(239,68,68,0.25)]">
+            <div id="coef-value" class="text-center text-5xl font-black text-red-300 sm:text-6xl">Exit before 1,30X</div>
+          </div>
+
+          <div class="glass w-full rounded-2xl p-5">
+            <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.16em] text-red-200/70">
+              <span>App synchronization</span>
+              <span id="sync-pct">0%</span>
+            </div>
+            <div class="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-white/10">
+              <div id="sync-bar" class="h-full w-0 rounded-full bg-gradient-to-r from-red-600 to-rose-500"></div>
+            </div>
+            <p id="sync-hint" class="mt-3 text-xs text-slate-400"></p>
+            <p id="sync-accuracy" class="mt-2 hidden text-xs font-semibold text-emerald-300">
+              The app is now operating with high accuracy.
+            </p>
+          </div>
+
+          <div class="flex w-full flex-col gap-3 sm:flex-row">
+            <button
+              id="btn-next"
+              class="flex-1 rounded-2xl border border-red-400/40 bg-red-500/20 py-4 text-sm font-bold uppercase tracking-wider text-red-100"
+            >
+              Get Next Signal
+            </button>
+            <button
+              id="btn-menu"
+              class="flex-1 rounded-2xl border border-white/10 bg-white/5 py-4 text-sm font-bold uppercase tracking-wider"
+            >
+              Back to Menu
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        var statusMessages = [
+          "Checking recent Aviator rounds...",
+          "Synchronizing account telemetry...",
+          "Analyzing volatility clusters...",
+          "Building crash-point range...",
+          "Validating confidence window...",
+          "Finalizing prediction signal...",
+        ];
+
+        var ranges = [
+          { min: 1.1, max: 1.2, weight: 25, label: "1.10x - 1.20x" },
+          { min: 1.21, max: 2.0, weight: 40, label: "1.21x - 2.00x" },
+          { min: 2.01, max: 5.0, weight: 20, label: "2.01x - 5.00x" },
+          { min: 5.01, max: 10.0, weight: 10, label: "5.01x - 10.00x" },
+          { min: 10.01, max: 50.0, weight: 5, label: "10.01x - 50.00x" },
+        ];
+
+        var state = {
+          syncDone: 0,
+          syncTarget: 3 + Math.floor(Math.random() * 3),
+          subTimer: null,
+          raf: null,
+        };
+
+        var menu = document.getElementById("screen-menu");
+        var loading = document.getElementById("screen-loading");
+        var result = document.getElementById("screen-result");
+
+        var syncPct = document.getElementById("sync-pct");
+        var syncBar = document.getElementById("sync-bar");
+        var syncHint = document.getElementById("sync-hint");
+        var syncAccuracy = document.getElementById("sync-accuracy");
+        var subStatus = document.getElementById("sub-status");
+        var loadPct = document.getElementById("load-pct");
+        var coefValue = document.getElementById("coef-value");
+
+        function updateSyncUi() {
+          var p = Math.min(100, Math.round((state.syncDone / state.syncTarget) * 100));
+          syncPct.textContent = p + "%";
+          syncBar.style.width = p + "%";
+          if (p >= 100) {
+            syncHint.textContent = "";
+            syncAccuracy.classList.remove("hidden");
+          } else {
+            syncHint.textContent =
+              "This field is filled with each new signal. After full completion, the bot will operate with high accuracy.";
+            syncAccuracy.classList.add("hidden");
+          }
+        }
+
+        function show(screen) {
+          var onMenu = screen === "menu";
+          var onLoading = screen === "loading";
+          var onResult = screen === "result";
+
+          menu.hidden = !onMenu;
+          menu.style.display = onMenu ? "block" : "none";
+
+          loading.hidden = !onLoading;
+          loading.style.display = onLoading ? "flex" : "none";
+
+          result.hidden = !onResult;
+          result.style.display = onResult ? "block" : "none";
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function pickRange() {
+          var total = ranges.reduce(function (s, r) { return s + r.weight; }, 0);
+          var pick = Math.random() * total;
+          var acc = 0;
+          for (var i = 0; i < ranges.length; i++) {
+            acc += ranges[i].weight;
+            if (pick <= acc) return ranges[i];
+          }
+          return ranges[ranges.length - 1];
+        }
+
+        function generateSignal() {
+          var r = pickRange();
+          var value = r.min + Math.random() * (r.max - r.min);
+          var truncated = Math.floor(value * 100) / 100;
+          var formatted = truncated.toFixed(2).replace(".", ",");
+          return { value: "Exit before " + formatted + "X", label: r.label };
+        }
+
+        function stopLoading() {
+          if (state.raf) cancelAnimationFrame(state.raf);
+          if (state.subTimer) clearTimeout(state.subTimer);
+          state.raf = null;
+          state.subTimer = null;
+        }
+
+        function startLoading() {
+          stopLoading();
+          show("loading");
+
+          var statusIndex = 0;
+          subStatus.textContent = statusMessages[statusIndex];
+          (function cycleStatus() {
+            state.subTimer = setTimeout(function () {
+              statusIndex = (statusIndex + 1) % statusMessages.length;
+              subStatus.textContent = statusMessages[statusIndex];
+              cycleStatus();
+            }, 900 + Math.random() * 700);
+          })();
+
+          var duration = 3000 + Math.random() * 2000;
+          var start = performance.now();
+          function tick(now) {
+            var p = Math.min(100, ((now - start) / duration) * 100);
+            loadPct.textContent = Math.round(p) + "%";
+            if (p < 100) {
+              state.raf = requestAnimationFrame(tick);
+            } else {
+              var signal = generateSignal();
+              coefValue.textContent = signal.value;
+              state.syncDone = Math.min(state.syncDone + 1, state.syncTarget);
+              updateSyncUi();
+              stopLoading();
+              show("result");
+            }
+          }
+          state.raf = requestAnimationFrame(tick);
+        }
+
+        document.getElementById("btn-start").addEventListener("click", startLoading);
+        document.getElementById("btn-next").addEventListener("click", startLoading);
+        document.getElementById("btn-menu").addEventListener("click", function () {
+          stopLoading();
+          state.syncDone = 0;
+          state.syncTarget = 3 + Math.floor(Math.random() * 3);
+          updateSyncUi();
+          show("menu");
+        });
+
+        updateSyncUi();
+        show("menu");
+      })();
+    </script>
+  </body>
+</html>
