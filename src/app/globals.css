@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  @apply min-h-[100dvh] antialiased text-slate-100;
+  background: #140307;
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(220, 38, 38, 0.36), transparent 55%),
+    radial-gradient(ellipse 80% 50% at 100% 50%, rgba(244, 63, 94, 0.14), transparent 45%),
+    radial-gradient(ellipse 60% 40% at 0% 80%, rgba(185, 28, 28, 0.12), transparent 40%);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(239, 68, 68, 0.35);
+}
