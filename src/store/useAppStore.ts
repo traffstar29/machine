@@ -29,11 +29,15 @@ export const useAppStore = create<AppState>((set) => ({
   telegramInitData: "",
 
   goProcessing: () =>
-    set((state) => ({
+    set({
       screen: "processing",
+    }),
+  goSignal: (signal) =>
+    set((state) => ({
+      screen: "signal",
+      signal,
       syncSignalsDone: Math.min(state.syncSignalsDone + 1, state.syncSignalsTarget),
     })),
-  goSignal: (signal) => set({ screen: "signal", signal }),
   goSettings: () =>
     set({
       screen: "settings",

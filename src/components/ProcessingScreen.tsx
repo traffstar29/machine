@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { generateSignal, getStatusMessages } from "@/lib/signal";
 import { useAppStore } from "@/store/useAppStore";
+import aviatorLogo from "../../aviator.png";
 import { CircularProgress } from "./CircularProgress";
-import { GlassCard } from "./GlassCard";
 
 const MAIN_STATUS = "Preparing Aviator prediction...";
 
@@ -75,9 +75,9 @@ export function ProcessingScreen() {
   return (
     <div className="animate-fade-in flex min-h-[70vh] flex-col items-center px-4 pb-28 pt-8">
       <header className="mb-10 text-center">
-        <p className="text-3xl">✈️</p>
+        <img src={aviatorLogo.src} alt="Aviator logo" className="mx-auto h-auto w-44" />
         <h2 className="bg-gradient-to-r from-red-300 to-rose-200 bg-clip-text text-2xl font-black tracking-tight text-transparent">
-          AVIATOR AI ENGINE
+          PROFIT MACHINE
         </h2>
         <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-200/60">
           Signal loading
@@ -97,30 +97,6 @@ export function ProcessingScreen() {
           {subStatus}
         </p>
       </div>
-
-      <GlassCard className="mt-10 w-full max-w-md p-5">
-        <p className="mb-3 text-[10px] font-semibold uppercase tracking-wider text-red-200/60">
-          Bot actions
-        </p>
-        <dl className="space-y-2 text-sm text-slate-200">
-          <div className="flex justify-between gap-4">
-            <dt className="text-slate-400">History scan</dt>
-            <dd className="text-right font-medium">Complete</dd>
-          </div>
-          <div className="flex justify-between gap-4">
-            <dt className="text-slate-400">Sync check</dt>
-            <dd className="text-right font-medium">Complete</dd>
-          </div>
-          <div className="flex justify-between gap-4">
-            <dt className="text-slate-400">Risk profile build</dt>
-            <dd className="text-right font-medium">Running</dd>
-          </div>
-          <div className="flex justify-between gap-4">
-            <dt className="text-slate-400">Prediction output</dt>
-            <dd className="text-right font-medium text-red-300">Preparing</dd>
-          </div>
-        </dl>
-      </GlassCard>
     </div>
   );
 }

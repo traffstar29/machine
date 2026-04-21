@@ -2,7 +2,6 @@ import { createSeededRandom } from "./seededRandom";
 
 export type GeneratedSignal = {
   targetCoefficient: string;
-  rangeLabel: string;
 };
 
 const STATUS_MESSAGES = [
@@ -18,14 +17,14 @@ type CoefficientRange = {
   min: number;
   max: number;
   weight: number;
-  label: string;
 };
 
 const COEFFICIENT_RANGES: CoefficientRange[] = [
-  { min: 1.1, max: 1.2, weight: 25, label: "1.10x - 1.20x" },
-  { min: 1.3, max: 2.0, weight: 45, label: "1.30x - 2.00x" },
-  { min: 2.1, max: 10.0, weight: 20, label: "2.10x - 10.00x" },
-  { min: 10.0, max: 50.0, weight: 10, label: "10.00x - 50.00x" },
+  { min: 1.1, max: 1.2, weight: 25 },
+  { min: 1.21, max: 2.0, weight: 40 },
+  { min: 2.01, max: 5.0, weight: 20 },
+  { min: 5.01, max: 10.0, weight: 10 },
+  { min: 10.01, max: 50.0, weight: 5 },
 ];
 
 export function getStatusMessages(): readonly string[] {
@@ -54,9 +53,10 @@ export function generateSignal(): GeneratedSignal {
   const rand = createSeededRandom(seed);
   const range = pickWeightedRange(rand);
   const rawValue = range.min + rand() * (range.max - range.min);
+  const truncated = Math.floor(rawValue * 100) / 100;
+  const formatted = truncated.toFixed(2).replace(".", ",");
 
   return {
-    targetCoefficient: `${rawValue.toFixed(2)}x`,
-    rangeLabel: range.label,
+    targetCoefficient: `Exit before ${formatted}X`,
   };
 }
