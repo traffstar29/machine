@@ -26,49 +26,53 @@ export function SignalScreen() {
   const syncDone = syncPercent >= 100;
 
   return (
-    <div className="animate-fade-in pb-28 pt-6">
-      <header className="mb-8 text-center">
-        <img src={aviatorLogo.src} alt={t.aviatorLogoAlt} className="mx-auto h-auto w-44" />
-        <h2 className="bg-gradient-to-r from-red-300 to-rose-200 bg-clip-text text-2xl font-black tracking-tight text-transparent">
+    <div className="flex min-h-[calc(100dvh-env(safe-area-inset-top))] flex-col pb-[calc(5.5rem+env(safe-area-inset-bottom))] pt-1">
+      <header className="mb-2 text-center">
+        <img src={aviatorLogo.src} alt={t.aviatorLogoAlt} className="mx-auto h-auto w-28" />
+        <h2 className="bg-gradient-to-r from-red-300 to-rose-200 bg-clip-text text-xl font-black tracking-tight text-transparent">
           PROFIT MACHINE
         </h2>
-        <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-200/60">
+        <p className="mt-0.5 text-[10px] uppercase tracking-[0.26em] text-red-200/60">
           {t.predictionReady}
         </p>
       </header>
 
-      <div className="mx-auto flex max-w-lg flex-col items-center gap-6">
+      <div className="mx-auto flex w-full max-w-lg flex-1 flex-col items-center gap-2">
         <RateLimitNotice />
 
-        <p className="max-w-[95%] text-center text-sm font-semibold uppercase leading-snug tracking-[0.14em] text-slate-200 sm:text-base sm:tracking-[0.18em]">
+        <p className="text-center text-xs font-semibold uppercase tracking-[0.12em] text-slate-200">
           {t.signalLabel}
         </p>
 
-        <div className="rounded-3xl border border-red-400/40 bg-red-500/10 px-10 py-8 shadow-[0_0_35px_rgba(239,68,68,0.25)]">
-          <div className="text-center text-5xl font-black tracking-tight text-red-300 sm:text-6xl">
+        <div className="w-full rounded-2xl border border-red-400/40 bg-red-500/10 px-6 py-5 shadow-[0_0_28px_rgba(239,68,68,0.22)]">
+          <div className="text-center text-4xl font-black tracking-tight text-red-300 sm:text-5xl">
             {signal.targetCoefficient}
           </div>
         </div>
 
-        <GlassCard className="w-full p-6" glow>
-          <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.16em] text-red-200/70">
+        <GlassCard className="w-full p-3.5" glow>
+          <div className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.14em] text-red-200/70">
             <span>{t.appSync}</span>
             <span>{syncPercent}%</span>
           </div>
-          <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-white/10">
+          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/10">
             <div
               className="h-full rounded-full bg-gradient-to-r from-red-600 to-rose-500 transition-all duration-500"
               style={{ width: `${syncPercent}%` }}
             />
           </div>
           {!syncDone ? (
-            <p className="mt-3 text-xs text-slate-400">{t.syncInProgress}</p>
+            <p className="mt-2 text-[11px] leading-snug text-slate-400">{t.syncInProgress}</p>
           ) : (
-            <p className="mt-3 text-xs font-semibold text-emerald-300">{t.syncComplete}</p>
+            <p className="mt-2 text-[11px] font-semibold leading-snug text-emerald-300">
+              {t.syncComplete}
+            </p>
           )}
         </GlassCard>
+      </div>
 
-        <div className="flex w-full flex-col gap-3 sm:flex-row">
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-[#190308]/90 px-4 py-2.5 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-lg flex-col gap-2 sm:flex-row">
           <button
             type="button"
             onClick={() => {
@@ -76,14 +80,14 @@ export function SignalScreen() {
               goProcessing();
             }}
             disabled={isBlocked}
-            className="flex-1 rounded-2xl border border-red-400/40 bg-red-500/20 py-4 text-sm font-bold uppercase tracking-wider text-red-100 transition hover:bg-red-500/30 disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex-1 rounded-2xl border border-red-400/40 bg-red-500/20 py-3 text-xs font-bold uppercase tracking-wider text-red-100 transition hover:bg-red-500/30 disabled:cursor-not-allowed disabled:opacity-40 sm:text-sm"
           >
             {t.getNextSignal}
           </button>
           <button
             type="button"
             onClick={() => goSettings()}
-            className="flex-1 rounded-2xl border border-white/10 bg-white/5 py-4 text-sm font-bold uppercase tracking-wider text-slate-200 transition hover:bg-white/10"
+            className="flex-1 rounded-2xl border border-white/10 bg-white/5 py-3 text-xs font-bold uppercase tracking-wider text-slate-200 transition hover:bg-white/10 sm:text-sm"
           >
             {t.backToMenu}
           </button>

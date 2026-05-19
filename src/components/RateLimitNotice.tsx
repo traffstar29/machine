@@ -14,9 +14,9 @@ export function RateLimitNotice() {
   if (quota.isBlocked) {
     const countdown = formatQuotaResetCountdown(quota.resetAt, locale);
     return (
-      <div className="rounded-2xl border border-amber-400/30 bg-amber-500/10 p-4 text-sm leading-relaxed text-amber-100">
+      <div className="rounded-xl border border-amber-400/30 bg-amber-500/10 p-2.5 text-xs leading-snug text-amber-100">
         <p>{t.rateLimitBlocked}</p>
-        <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-amber-200/80">
+        <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-amber-200/80">
           {t.rateLimitTryAgainIn(countdown)}
         </p>
       </div>

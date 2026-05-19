@@ -56,7 +56,7 @@ export function CircularProgress({
         />
       </svg>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-mono text-4xl font-bold tabular-nums text-white">
+        <span className="font-mono text-3xl font-bold tabular-nums text-white">
           {Math.round(pct)}
         </span>
         <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-red-200/65">

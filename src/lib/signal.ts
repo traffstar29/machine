@@ -5,38 +5,34 @@ export type GeneratedSignal = {
   targetCoefficient: string;
 };
 
-/** Aviator return-to-player (house edge ~3%). */
-const AVIATOR_RTP = 0.97;
+type CoefficientBand = {
+  min: number;
+  max: number;
+  weight: number;
+};
 
-const COEFFICIENT_MIN = 1.05;
-const COEFFICIENT_MAX = 100;
+const COEFFICIENT_BANDS: CoefficientBand[] = [
+  { min: 1.05, max: 1.39, weight: 75 },
+  { min: 1.4, max: 2.0, weight: 15 },
+  { min: 2.01, max: 100.0, weight: 10 },
+];
 
-/** Win-rate band for the high-frequency zone (avg ≈ 75%). */
-const CORE_WIN_RATE_MIN = 0.7;
-const CORE_WIN_RATE_MAX = 0.8;
+function pickBand(rand: () => number): CoefficientBand {
+  const totalWeight = COEFFICIENT_BANDS.reduce((sum, band) => sum + band.weight, 0);
+  const pick = rand() * totalWeight;
+  let acc = 0;
 
-/** Share of signals in the ~75% win-rate zone (m ≈ 1.05x–1.39x). */
-const CORE_ZONE_WEIGHT = 0.75;
-
-function clampCoefficient(m: number): number {
-  return Math.min(COEFFICIENT_MAX, Math.max(COEFFICIENT_MIN, m));
-}
-
-/**
- * m = RTP / p. Most draws target ~75% round win rate; tail spans up to 100x.
- */
-export function computeTargetCoefficient(rand: () => number = Math.random): number {
-  if (rand() < CORE_ZONE_WEIGHT) {
-    const p =
-      CORE_WIN_RATE_MIN + rand() * (CORE_WIN_RATE_MAX - CORE_WIN_RATE_MIN);
-    return clampCoefficient(AVIATOR_RTP / p);
+  for (const band of COEFFICIENT_BANDS) {
+    acc += band.weight;
+    if (pick <= acc) return band;
   }
 
-  const logMin = Math.log(COEFFICIENT_MIN);
-  const logMax = Math.log(COEFFICIENT_MAX);
-  const m = Math.exp(logMin + rand() * (logMax - logMin));
+  return COEFFICIENT_BANDS[COEFFICIENT_BANDS.length - 1]!;
+}
 
-  return clampCoefficient(m);
+export function computeTargetCoefficient(rand: () => number = Math.random): number {
+  const band = pickBand(rand);
+  return band.min + rand() * (band.max - band.min);
 }
 
 function formatCoefficient(value: number): string {

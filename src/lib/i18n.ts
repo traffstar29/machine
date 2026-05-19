@@ -27,7 +27,7 @@ const en: Translations = {
   brandTagline: "Signal Assistant",
   howToUse: "How to use",
   howToSteps: [
-    "1. The predictor does not show the exact game-end coefficient—it shows when you should exit to win the round.",
+    "1. The app shows when to cash out to win the round. It does not show the exact crash number in the game.",
     "2. The app shows up to what coefficient value you should exit the round.",
     "3. The coefficient in the app and in the game may differ, but our signal shows an exit point designed to keep your session profitable.",
     "4. Before main play, sync your account with a few minimum-bet rounds.",
@@ -66,7 +66,7 @@ const fr: Translations = {
   brandTagline: "Assistant de signaux",
   howToUse: "Mode d'emploi",
   howToSteps: [
-    "1. Le prédicteur n'indique pas le coefficient exact de fin de partie — il montre quand sortir pour gagner la manche.",
+    "1. L'app indique quand encaisser pour gagner la manche. Elle n'affiche pas le chiffre exact du crash dans le jeu.",
     "2. L'application indique jusqu'à quel coefficient vous devez quitter la manche.",
     "3. Le coefficient dans l'application et dans le jeu peut différer, mais notre signal indique un point de sortie conçu pour garder votre session rentable.",
     "4. Avant de jouer normalement, synchronisez votre compte avec quelques manches à mise minimale.",

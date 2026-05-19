@@ -83,27 +83,27 @@ export function ProcessingScreen() {
   }, [locale, t.preparingPrediction]);
 
   return (
-    <div className="animate-fade-in flex min-h-[70vh] flex-col items-center px-4 pb-28 pt-8">
-      <header className="mb-10 text-center">
-        <img src={aviatorLogo.src} alt={t.aviatorLogoAlt} className="mx-auto h-auto w-44" />
-        <h2 className="bg-gradient-to-r from-red-300 to-rose-200 bg-clip-text text-2xl font-black tracking-tight text-transparent">
+    <div className="flex min-h-[calc(100dvh-env(safe-area-inset-top))] flex-col items-center px-4 pt-2">
+      <header className="mb-3 text-center">
+        <img src={aviatorLogo.src} alt={t.aviatorLogoAlt} className="mx-auto h-auto w-28" />
+        <h2 className="bg-gradient-to-r from-red-300 to-rose-200 bg-clip-text text-xl font-black tracking-tight text-transparent">
           PROFIT MACHINE
         </h2>
-        <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-200/60">
+        <p className="mt-0.5 text-[10px] uppercase tracking-[0.26em] text-red-200/60">
           {t.signalLoading}
         </p>
       </header>
 
       <div className="flex flex-col items-center">
-        <CircularProgress value={pct} size={220} stroke={12} />
-        <p className="mt-6 text-xs font-bold uppercase tracking-[0.35em] text-red-300/90">
+        <CircularProgress value={pct} size={168} stroke={10} />
+        <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.3em] text-red-300/90">
           {t.processing}
         </p>
       </div>
 
-      <div className="mt-10 w-full max-w-md space-y-2 text-center">
-        <p className="text-sm font-medium text-slate-200">{t.preparingPrediction}</p>
-        <p className="min-h-[1.25rem] text-xs text-slate-500 transition-all duration-300">
+      <div className="mt-4 w-full max-w-md space-y-1 text-center">
+        <p className="text-xs font-medium text-slate-200">{t.preparingPrediction}</p>
+        <p className="min-h-[1rem] text-[11px] text-slate-500 transition-all duration-300">
           {subStatus}
         </p>
       </div>
