@@ -30,10 +30,10 @@ export function SettingsScreen() {
         <RateLimitNotice />
 
         <GlassCard className="p-3.5">
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-red-200/70">
+          <p className="mb-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-red-200/70">
             {t.howToUse}
           </p>
-          <ol className="space-y-1.5 text-xs leading-snug text-slate-100">
+          <ol className="space-y-2 text-sm leading-relaxed text-slate-100">
             {t.howToSteps.map((step) => (
               <li key={step}>{step}</li>
             ))}
