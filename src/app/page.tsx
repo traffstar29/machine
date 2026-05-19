@@ -3,6 +3,7 @@
 import { ProcessingScreen } from "@/components/ProcessingScreen";
 import { SettingsScreen } from "@/components/SettingsScreen";
 import { SignalScreen } from "@/components/SignalScreen";
+import { QuotaSync } from "@/components/QuotaSync";
 import { TelegramInit } from "@/components/TelegramInit";
 import { useAppStore } from "@/store/useAppStore";
 
@@ -19,6 +20,7 @@ export default function HomePage() {
         }}
       />
       <TelegramInit />
+      <QuotaSync />
       {screen === "settings" && <SettingsScreen />}
       {screen === "processing" && <ProcessingScreen />}
       {screen === "signal" && <SignalScreen />}

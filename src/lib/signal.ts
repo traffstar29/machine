@@ -1,62 +1,62 @@
-import { createSeededRandom } from "./seededRandom";
+import type { AppLocale } from "./i18n";
+import { getTranslations } from "./i18n";
 
 export type GeneratedSignal = {
   targetCoefficient: string;
 };
 
-const STATUS_MESSAGES = [
-  "Checking recent Aviator rounds...",
-  "Synchronizing account telemetry...",
-  "Analyzing volatility clusters...",
-  "Building crash-point range...",
-  "Validating confidence window...",
-  "Finalizing prediction signal...",
-] as const;
+/** Aviator return-to-player (house edge ~3%). */
+const AVIATOR_RTP = 0.97;
 
-type CoefficientRange = {
-  min: number;
-  max: number;
-  weight: number;
-};
+const COEFFICIENT_MIN = 1.05;
+const COEFFICIENT_MAX = 100;
 
-const COEFFICIENT_RANGES: CoefficientRange[] = [
-  { min: 1.1, max: 1.2, weight: 25 },
-  { min: 1.21, max: 2.0, weight: 40 },
-  { min: 2.01, max: 5.0, weight: 20 },
-  { min: 5.01, max: 10.0, weight: 10 },
-  { min: 10.01, max: 50.0, weight: 5 },
-];
+/** Win-rate band for the high-frequency zone (avg ≈ 75%). */
+const CORE_WIN_RATE_MIN = 0.7;
+const CORE_WIN_RATE_MAX = 0.8;
 
-export function getStatusMessages(): readonly string[] {
-  return STATUS_MESSAGES;
+/** Share of signals in the ~75% win-rate zone (m ≈ 1.05x–1.39x). */
+const CORE_ZONE_WEIGHT = 0.75;
+
+function clampCoefficient(m: number): number {
+  return Math.min(COEFFICIENT_MAX, Math.max(COEFFICIENT_MIN, m));
+}
+
+/**
+ * m = RTP / p. Most draws target ~75% round win rate; tail spans up to 100x.
+ */
+export function computeTargetCoefficient(rand: () => number = Math.random): number {
+  if (rand() < CORE_ZONE_WEIGHT) {
+    const p =
+      CORE_WIN_RATE_MIN + rand() * (CORE_WIN_RATE_MAX - CORE_WIN_RATE_MIN);
+    return clampCoefficient(AVIATOR_RTP / p);
+  }
+
+  const logMin = Math.log(COEFFICIENT_MIN);
+  const logMax = Math.log(COEFFICIENT_MAX);
+  const m = Math.exp(logMin + rand() * (logMax - logMin));
+
+  return clampCoefficient(m);
+}
+
+function formatCoefficient(value: number): string {
+  const truncated = Math.floor(value * 100) / 100;
+  return truncated.toFixed(2).replace(".", ",");
+}
+
+export function getStatusMessages(locale: AppLocale): readonly string[] {
+  return getTranslations(locale).statusMessages;
 }
 
 export function getRandomSignalTargetCount(): number {
-  return 3 + Math.floor(Math.random() * 3);
+  return 8 + Math.floor(Math.random() * 5);
 }
 
-function pickWeightedRange(rand: () => number): CoefficientRange {
-  const totalWeight = COEFFICIENT_RANGES.reduce((sum, item) => sum + item.weight, 0);
-  const pick = rand() * totalWeight;
-  let acc = 0;
-
-  for (const item of COEFFICIENT_RANGES) {
-    acc += item.weight;
-    if (pick <= acc) return item;
-  }
-
-  return COEFFICIENT_RANGES[COEFFICIENT_RANGES.length - 1]!;
-}
-
-export function generateSignal(): GeneratedSignal {
-  const seed = `${Date.now()}:${Math.random()}`;
-  const rand = createSeededRandom(seed);
-  const range = pickWeightedRange(rand);
-  const rawValue = range.min + rand() * (range.max - range.min);
-  const truncated = Math.floor(rawValue * 100) / 100;
-  const formatted = truncated.toFixed(2).replace(".", ",");
+export function generateSignal(locale: AppLocale): GeneratedSignal {
+  const formatted = formatCoefficient(computeTargetCoefficient());
+  const t = getTranslations(locale);
 
   return {
-    targetCoefficient: `Exit before ${formatted}X`,
+    targetCoefficient: t.exitBefore(formatted),
   };
 }

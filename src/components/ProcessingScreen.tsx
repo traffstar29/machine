@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "@/hooks/useTranslations";
 import { generateSignal, getStatusMessages } from "@/lib/signal";
+import { canRequestSignal } from "@/lib/signalQuota";
 import { useAppStore } from "@/store/useAppStore";
 import aviatorLogo from "../../aviator.png";
 import { CircularProgress } from "./CircularProgress";
 
-const MAIN_STATUS = "Preparing Aviator prediction...";
-
-/** Linear 0–100% over wall-clock time (8–10s). Matches ring and number. */
+/** Linear 0–100% over 3s. Matches ring and number. */
 function linearProgress(elapsedMs: number, totalMs: number): number {
   if (totalMs <= 0) return 100;
   const t = elapsedMs / totalMs;
@@ -17,14 +17,23 @@ function linearProgress(elapsedMs: number, totalMs: number): number {
 
 export function ProcessingScreen() {
   const goSignal = useAppStore((s) => s.goSignal);
+  const goSettings = useAppStore((s) => s.goSettings);
+  const locale = useAppStore((s) => s.locale);
+  const t = useTranslations();
+
+  useEffect(() => {
+    if (!canRequestSignal()) {
+      goSettings();
+    }
+  }, [goSettings]);
 
   const [pct, setPct] = useState(0);
-  const [subStatus, setSubStatus] = useState(() => getStatusMessages()[0]);
+  const [subStatus, setSubStatus] = useState(() => getStatusMessages(locale)[0] ?? "");
   const doneRef = useRef(false);
   const subTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const durationMs = 3000 + Math.random() * 2000;
+    const durationMs = 3000;
     const start = performance.now();
     let raf = 0;
 
@@ -40,20 +49,21 @@ export function ProcessingScreen() {
 
       if (!doneRef.current) {
         doneRef.current = true;
-        const wait = 500 + Math.random() * 500;
-        window.setTimeout(() => {
-          const signal = generateSignal();
-          goSignal(signal);
-        }, wait);
+        if (!canRequestSignal()) {
+          goSettings();
+          return;
+        }
+        goSignal(generateSignal(locale));
       }
     };
 
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [goSignal]);
+  }, [goSignal, goSettings, locale]);
 
   useEffect(() => {
-    const messages = [...getStatusMessages()];
+    const messages = [...getStatusMessages(locale)];
+    setSubStatus(messages[0] ?? t.preparingPrediction);
     let i = 0;
     let cancelled = false;
     const step = () => {
@@ -61,7 +71,7 @@ export function ProcessingScreen() {
       subTimerRef.current = window.setTimeout(() => {
         if (cancelled) return;
         i = (i + 1) % messages.length;
-        setSubStatus(messages[i] ?? MAIN_STATUS);
+        setSubStatus(messages[i] ?? t.preparingPrediction);
         step();
       }, delay);
     };
@@ -70,29 +80,29 @@ export function ProcessingScreen() {
       cancelled = true;
       if (subTimerRef.current != null) clearTimeout(subTimerRef.current);
     };
-  }, []);
+  }, [locale, t.preparingPrediction]);
 
   return (
     <div className="animate-fade-in flex min-h-[70vh] flex-col items-center px-4 pb-28 pt-8">
       <header className="mb-10 text-center">
-        <img src={aviatorLogo.src} alt="Aviator logo" className="mx-auto h-auto w-44" />
+        <img src={aviatorLogo.src} alt={t.aviatorLogoAlt} className="mx-auto h-auto w-44" />
         <h2 className="bg-gradient-to-r from-red-300 to-rose-200 bg-clip-text text-2xl font-black tracking-tight text-transparent">
           PROFIT MACHINE
         </h2>
         <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-200/60">
-          Signal loading
+          {t.signalLoading}
         </p>
       </header>
 
       <div className="flex flex-col items-center">
         <CircularProgress value={pct} size={220} stroke={12} />
         <p className="mt-6 text-xs font-bold uppercase tracking-[0.35em] text-red-300/90">
-          Processing
+          {t.processing}
         </p>
       </div>
 
       <div className="mt-10 w-full max-w-md space-y-2 text-center">
-        <p className="text-sm font-medium text-slate-200">{MAIN_STATUS}</p>
+        <p className="text-sm font-medium text-slate-200">{t.preparingPrediction}</p>
         <p className="min-h-[1.25rem] text-xs text-slate-500 transition-all duration-300">
           {subStatus}
         </p>
