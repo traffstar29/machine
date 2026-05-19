@@ -12,9 +12,9 @@ type CoefficientBand = {
 };
 
 const COEFFICIENT_BANDS: CoefficientBand[] = [
-  { min: 1.05, max: 1.39, weight: 75 },
-  { min: 1.4, max: 2.0, weight: 15 },
-  { min: 2.01, max: 100.0, weight: 10 },
+  { min: 1.05, max: 1.39, weight: 85 },
+  { min: 1.4, max: 2.0, weight: 10 },
+  { min: 2.01, max: 100.0, weight: 5 },
 ];
 
 function pickBand(rand: () => number): CoefficientBand {
