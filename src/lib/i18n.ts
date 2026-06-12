@@ -29,8 +29,6 @@ const en: Translations = {
   howToSteps: [
     "1. The app shows when to cash out to win the round. It does not show the exact crash number in the game.",
     "2. Start the predictor 5 to 10 seconds before the round begins. The signal will be more accurate.",
-    "3. Before main play, sync your account with a few minimum-bet rounds.",
-    "4. Synchronization improves signal precision. Then begin normal sessions.",
   ],
   start: "START",
   signalLoading: "Signal loading",
@@ -67,8 +65,6 @@ const fr: Translations = {
   howToSteps: [
     "1. L'app indique quand encaisser pour gagner la manche. Elle n'affiche pas le chiffre exact du crash dans le jeu.",
     "2. Lancez le prédicteur 5 à 10 secondes avant le début de la manche. Le signal sera plus précis.",
-    "3. Avant de jouer normalement, synchronisez votre compte avec quelques manches à mise minimale.",
-    "4. La synchronisation améliore la précision des signaux. Ensuite, commencez vos sessions habituelles.",
   ],
   start: "DÉMARRER",
   signalLoading: "Chargement du signal",

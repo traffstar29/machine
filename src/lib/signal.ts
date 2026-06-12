@@ -44,10 +44,6 @@ export function getStatusMessages(locale: AppLocale): readonly string[] {
   return getTranslations(locale).statusMessages;
 }
 
-export function getRandomSignalTargetCount(): number {
-  return 8 + Math.floor(Math.random() * 5);
-}
-
 export function generateSignal(locale: AppLocale): GeneratedSignal {
   const formatted = formatCoefficient(computeTargetCoefficient());
   const t = getTranslations(locale);
