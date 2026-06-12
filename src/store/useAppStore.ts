@@ -8,7 +8,9 @@ import {
   getSignalQuotaStatus,
   type SignalQuotaStatus,
 } from "@/lib/signalQuota";
-import { getRandomSignalTargetCount, type GeneratedSignal } from "@/lib/signal";
+import type { GeneratedSignal } from "@/lib/signal";
+
+const SYNC_COMPLETE = 1;
 
 export type Screen = "settings" | "processing" | "signal";
 
@@ -34,8 +36,8 @@ type AppState = {
 export const useAppStore = create<AppState>((set) => ({
   screen: "settings",
   signal: null,
-  syncSignalsDone: 0,
-  syncSignalsTarget: getRandomSignalTargetCount(),
+  syncSignalsDone: SYNC_COMPLETE,
+  syncSignalsTarget: SYNC_COMPLETE,
   locale: "en",
   signalQuota: null,
   telegramUserId: null,
@@ -51,18 +53,17 @@ export const useAppStore = create<AppState>((set) => ({
     set({ screen: "processing" });
   },
   goSignal: (signal) =>
-    set((state) => ({
+    set({
       screen: "signal",
       signal,
-      syncSignalsDone: Math.min(state.syncSignalsDone + 1, state.syncSignalsTarget),
       signalQuota: consumeSignalQuota(),
-    })),
+    }),
   goSettings: () =>
     set({
       screen: "settings",
       signal: null,
-      syncSignalsDone: 0,
-      syncSignalsTarget: getRandomSignalTargetCount(),
+      syncSignalsDone: SYNC_COMPLETE,
+      syncSignalsTarget: SYNC_COMPLETE,
       signalQuota: getSignalQuotaStatus(),
     }),
 
